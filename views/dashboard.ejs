@@ -1,0 +1,48 @@
+<%+ extend('layout')%>
+
+<%+ section('headers')%>
+    <title>مانیتورینگ</title>
+    <script src="/js/socket.io.js"></script>
+    <script src="/js/moment.min.js"></script>
+    <script src="/js/angular.min.js"></script>
+    <script src="/js/Chart.min.js"></script>
+    <script src="/js/angular-chart.min.js"></script>
+
+    <script src="/js/app/app.js"></script>
+    <script src="/js/app/unitDir.js"></script>
+    <script src="/js/app/dashboardServices.js"></script>
+    <script src="/js/app/dashboardCtrl.js"></script>
+<%+ endSection%>
+
+<%+ section('content')%>
+<div ng-app='app' ng-controller="dashboardCtrl as self" class="container-fluid">
+    <div class="row" ng-repeat="pm in powermeters">
+        <div class="col-md-12 powermeter__container" ng-show="pm.show">
+            <a class="btn btn-success btn-download" style="margin-top: 10px" href="/download?id={{pm.id}}">دانلود اطلاعات</a>
+            <h3 ng-bind="pm.name" class="powermeter__title"></h3>
+            <div unit ng-repeat="register in pm.registers | orderBy: 'order'"
+                ng-id="pm.id+'_'+register.address"
+                ng-model="register.value"
+                ng-title="register.name",
+                ng-show-chart="register.show=='chart'",
+                ng-hide="register.show=='none'"
+                ng-min="register.min"
+                ng-max="register.max"
+                class="col-xs-{{register.width}}">
+            </div>
+        </div>
+    </div>
+    <div class="process">
+        <h1>در حال ذخیره. کمی صبر کنید</h1>
+    </div>
+    <div class="success">
+        <h1>اطلاعات با موفقیت ذخیره شد</h1>
+    </div>
+    <div class="error">
+        <h1>خطا در ذخیره اطلاعات رخ داد</h1>
+    </div>
+    <div class="devices">
+        <ul class="list-group device-list"></ul>
+    </div>
+</div>
+<%+ endSection%>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel='stylesheet' href='/css/bootstrap.min.css' />
+    <link rel='stylesheet' href='/css/bootstrap-rtl.min.css' />
+    <link rel='stylesheet' href='/css/styles.css' />
+    <script src="/js/jquery-1.12.4.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/socket.io.js"></script>
+    <script src="/js/moment.min.js"></script>
+    <script src="/js/chart.min.js"></script>
+    <%+ yield('headers')%>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+</head>
+
+<body>
+    <ul class="navlist hidden">
+        <li class="<%=activePage == ''? 'active' : ''%>">
+            <a href="/">
+                <i class="glyphicon glyphicon-home"></i>
+                دشبورد
+            </a>
+        </li>
+        <li class="<%=activePage == 'export'? 'active' : ''%>">
+            <a href="/export">
+                <i class="glyphicon glyphicon-download"></i>
+                دانلود اطلاعات
+            </a>
+        </li>
+        <li class="<%=activePage == 'settings'? 'active' : ''%>">
+            <a href="/settings">
+                <i class="glyphicon glyphicon-cog"></i>
+                تنظیمات
+            </a>
+        </li>
+    </ul>
+
+    <%+ yield('content')%>
+</body>
+
+</html>
