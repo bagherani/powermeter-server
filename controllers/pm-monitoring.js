@@ -21,7 +21,7 @@ class PowerMonitoring extends EventEmitter {
         // try connect every 7 second.
         setInterval(function () {
             if (!self.isConnected) {
-                self.client.close(function () {});
+                self.client.close(function () { });
 
                 setTimeout(function () {
                     self.connect();
@@ -150,9 +150,7 @@ class PowerMonitoring extends EventEmitter {
     insertIntoDb(data) {
         var self = this;
         data.forEach((pm) => {
-            var row = {
-                _id: Date.now(),
-            }
+            var row = {};
             pm.registers.forEach((register) => {
                 row[register.address] = register.value;
             });

@@ -1,5 +1,3 @@
-const drivelist = require('drivelist');
-var usb = require('usb')
 var express = require('express');
 var router = express.Router();
 var pm = require('../controllers/pm-monitoring');
@@ -10,42 +8,9 @@ var config = require('../config.json');
 var io = require('socket.io').listen(config.socketPort);
 
 io.on('connection', function (socket) {
-
-    // uncomment this section in test mode
-    // setInterval(() => {
-    //     for (let i = 0; i < 11; i++) {
-    //         config.powermeters[0].registers[i].value = Math.random() * 300;
-    //     }
-    //     for (let i = 0; i < 11; i++) {
-    //         config.powermeters[1].registers[i].value = Math.random() * 300;
-    //     }
-    //     socket.emit('message', config.powermeters);
-    // }, 300);
-
     pm.on('readingdone', (data) => {
         socket.emit('message', data);
     });
-
-    /*usb.on('attach', function (device) {
-        drivelist.list((error, drives) => {
-            if (error) {
-                return;
-            }
-            var usbDevices = [];
-            drives.forEach((drive) => {
-                if (drive.description.toLowerCase().indexOf("usb") > -1) {
-                    if (drive.description.toLowerCase().indexOf("root") == -1 && drive.description.toLowerCase().indexOf("boot") == -1)
-                        usbDevices.push(drive.mountpoints[0].path);
-                }
-            });
-            if (usbDevices.length > 0) {
-                socket.emit('usb', usbDevices);
-            }
-        });
-    });
-    usb.on('detach', function () {
-        socket.emit('usboff', '');
-    });*/
 });
 
 router.get('/', function (req, res, next) {
