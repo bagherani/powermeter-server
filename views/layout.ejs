@@ -3,13 +3,18 @@
 
 <head>
     <link rel='stylesheet' href='/css/bootstrap.min.css' />
-    <link rel='stylesheet' href='/css/bootstrap-rtl.min.css' />
+    <!-- <link rel='stylesheet' href='/css/bootstrap-rtl.min.css' /> -->
     <link rel='stylesheet' href='/css/styles.css' />
     <script src="/js/jquery-1.12.4.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/socket.io.js"></script>
     <script src="/js/moment.min.js"></script>
+    <script src="/js/moment.min.js"></script>
     <script src="/js/chart.min.js"></script>
+    <script src="/js/angular.min.js"></script>
+    <script src="/js/Chart.min.js"></script>
+    <script src="/js/angular-chart.min.js"></script>
+    <script src="/js/app/app.js"></script>
     <%+ yield('headers')%>
 
     <meta charset="UTF-8">
@@ -22,13 +27,13 @@
         <li class="<%=activePage == ''? 'active' : ''%>">
             <a href="/">
                 <i class="glyphicon glyphicon-home"></i>
-                دشبورد
+                Dashboard
             </a>
         </li>
         <li class="<%=activePage == 'settings'? 'active' : ''%>">
             <a href="/settings">
                 <i class="glyphicon glyphicon-cog"></i>
-                تنظیمات
+                Settings
             </a>
         </li>
     </ul>

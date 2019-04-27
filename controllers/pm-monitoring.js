@@ -1,106 +1,105 @@
 const EventEmitter = require('events').EventEmitter;
+const Database = require('./database');
+const float = require('ieee-float');
+const config = require('../config.json');
+const ModbusRTU = require("modbus-serial");
 
 class PowerMonitoring extends EventEmitter {
 
     constructor() {
         super();
-        var self = this;
-        this.db = require('./database');
-        self.float = require('ieee-float');
-        self.config = require('../config');
-        self.result = {};
-        self.result.data = Object.assign([], self.config.powermeters);
-        self.result.isSuccess = true;
-        self.result.message = "";
-        self.isConnected = false;
-        self.connectionErrorMsg = `خطا در اتصال به پورت: ${self.config.serial}`;
-        var ModbusRTU = require("modbus-serial");
-        self.client = new ModbusRTU();
-        self.connect();
+        Database.connect();
+        this.result = {
+            data: [/* config.powermeters */],
+            isSuccess: true,
+            message: ''
+        };
+        this.isConnected = false;
+        this.result.data = Object.assign([], config.powermeters);
+        this.connectionErrorMsg = `Error in connecting to port ${config.serial}`;
+        this.client = new ModbusRTU();
+        this.connectToPort();
 
         // try connect every 7 second.
-        setInterval(function () {
-            if (!self.isConnected) {
-                self.client.close(function () { });
-
-                setTimeout(function () {
-                    self.connect();
+        setInterval(() => {
+            if (!this.isConnected) {
+                setTimeout(() => {
+                    this.connectToPort();
                 }, 2000);
             }
         }, 7000);
     }
 
     /** connect to port */
-    connect() {
-        var self = this;
-        if (self.isConnected)
+    connectToPort() {
+        if (this.isConnected)
             return;
+
         // try connect
-        self.client.connectRTUBuffered(self.config.serial, {
-            baudRate: self.config.baudRate,
-            parity: self.config.parity,
+        this.client.connectRTUBuffered(config.serial, {
+            baudRate: config.baudRate,
+            parity: config.parity,
         }).then((promiseRes) => {
-            console.info('Connected to port:' + self.config.serial);
-            self.isConnected = true;
-            self.emit('connected');
+            console.info('Connected to port:' + config.serial);
+            this.isConnected = true;
+            this.emit('connected');
             // begin reading
-            self.read(0, 0);
+            this.read(0, 0);
         }).catch((e) => {
-            console.error('Error in connecting to port:' + self.config.serial, e);
-            self.isConnected = false;
-            self.result.isSuccess = false;
-            self.result.message = self.connectionErrorMsg;
-            self.emit('disconnected');
+            console.error(`Error in connecting to port ${config.serial}`, e);
+            this.isConnected = false;
+            this.result.isSuccess = false;
+            this.result.message = this.connectionErrorMsg;
+            this.emit('disconnected');
         });
     }
 
     /** set the data status to broken */
     setBrokenConnection() {
-        var self = this;
-        self.isConnected = false;
-        self.result.isSuccess = false;
-        self.result.message = self.connectionErrorMsg;
-        self.emit('disconnected');
+        this.isConnected = false;
+        this.result.isSuccess = false;
+        this.result.message = this.connectionErrorMsg;
+        this.emit('disconnected');
 
     }
 
     /** read powemeters sequentially */
     read(powerMeterIndex, registerIndex) {
-        var self = this;
-        if (!self.isConnected)
+        if (!this.isConnected)
             return;
 
-        var currentPowermeter = self.config.powermeters[powerMeterIndex];
+        var currentPowermeter = config.powermeters[powerMeterIndex];
 
-        self.client.setID(currentPowermeter.id);
+        this.client.setID(currentPowermeter.id);
 
-        var powermeterData = self.result.data.find((item) => {
+        var powermeterData = this.result.data.find((item) => {
             return item.id == currentPowermeter.id;
         })
 
         let register = powermeterData.registers[registerIndex];
         let isReadRegisterResolved = false;
         let isReadingExpired = false;
+
         setTimeout(() => {
             register.value = 0;
             // another thread.
-            self.client.readHoldingRegisters(register.address, register.length, (err, res) => {
+            this.client.readHoldingRegisters(register.address, register.length, (err, res) => {
 
                 isReadRegisterResolved = true;
 
                 if (err && err.errno == 'ECONNREFUSED') {
-                    self.setBrokenConnection();
+                    this.setBrokenConnection();
                     return;
                 }
 
                 if (err) {
                     console.error('Error reading register:', register, "full stack:", err);
                     currentPowermeter.hasError = true;
-                    currentPowermeter.message = `خطا در خواندن: ${register.name} محل: ${register.address}`;
+                    currentPowermeter.message = `Error reading register: ${register.name} address: ${register.address}`;
                 } else {
                     currentPowermeter.hasError = false;
-                    self.result.isSuccess = true;
-                    register.value = parseFloat((self.float.readFloatBE([res.buffer[2], res.buffer[3], res.buffer[0], res.buffer[1]])).toFixed(2));
+                    this.result.isSuccess = true;
+                    register.value = parseFloat((this.float.readFloatBE([res.buffer[2], res.buffer[3], res.buffer[0], res.buffer[1]])).toFixed(2));
                 } // end of else
 
                 setTimeout(() => {
@@ -109,16 +108,16 @@ class PowerMonitoring extends EventEmitter {
                         if (registerIndex >= powermeterData.registers.length) {
                             registerIndex = 0;
                             powerMeterIndex++;
-                            if (powerMeterIndex >= self.config.powermeters.length) {
+                            if (powerMeterIndex >= config.powermeters.length) {
                                 powerMeterIndex = 0;
-                                self.emit('readingdone', self.result.data);
-                                self.insertIntoDb(self.result.data);
+                                this.emit('readingdone', this.result.data);
+                                this.insertIntoDb(this.result.data);
                             }
                         }
-                        // self invoke
-                        self.read(powerMeterIndex, registerIndex);
+                        // read next registers
+                        this.read(powerMeterIndex, registerIndex);
                     }
-                }, self.config.registerReadingInterval);
+                }, config.registerReadingInterval);
             });
 
         }, 1);
@@ -127,34 +126,38 @@ class PowerMonitoring extends EventEmitter {
             if (isReadRegisterResolved)
                 return;
             currentPowermeter.hasError = true;
-            currentPowermeter.message = `خطا در خواندن: ${register.name} محل: ${register.address}`;
+            currentPowermeter.message = `Error reading register: ${register.name} address: ${register.address}`;
             isReadingExpired = true;
             setTimeout(() => {
                 registerIndex++;
                 if (registerIndex >= powermeterData.registers.length) {
                     registerIndex = 0;
                     powerMeterIndex++;
-                    if (powerMeterIndex >= self.config.powermeters.length) {
+                    if (powerMeterIndex >= config.powermeters.length) {
                         powerMeterIndex = 0;
-                        self.emit('readingdone', self.result.data);
-                        self.insertIntoDb(self.result.data);
+                        this.emit('readingdone', this.result.data);
+                        this.insertIntoDb(this.result.data);
                     }
                 }
-                // self invoke
-                self.read(powerMeterIndex, registerIndex);
+                // read next registers
+                this.read(powerMeterIndex, registerIndex);
             }, 1);
         }, 1300)
 
     }
 
+    /**
+     * 
+     * @param {[]} data 
+     */
     insertIntoDb(data) {
-        var self = this;
         data.forEach((pm) => {
             var row = {};
             pm.registers.forEach((register) => {
                 row[register.address] = register.value;
             });
-            self.db.insert('p' + pm.id, row, null);
+
+            Database.insert(`p${pm.id}`, row);
         });
     }
 }

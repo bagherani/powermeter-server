@@ -9,17 +9,27 @@ class Database extends EventEmitter {
 
         /**@type Db */
         this.db = null;
+        this.isConnected = false;
+
+        setInterval(() => {
+            this.connect();
+        }, 20000);
     }
 
     connect() {
+        if (this.isConnected)
+            return null;
+
         return (new Promise((res, rej) => {
             MongoClient.connect(connectionString, { useNewUrlParser: true }, (err, client) => {
                 if (err) {
+                    this.isConnected = false;
                     rej(err);
                 }
 
                 this.db = client.db("pm");
                 this.emit('connected');
+                this.isConnected = true;
                 res();
             });
         }));
@@ -32,19 +42,22 @@ class Database extends EventEmitter {
      */
     insert(collectionName, data) {
         return (new Promise((res, rej) => {
-            if (this.db == null)
+            if (this.db == null) {
+                this.isConnected = false;
                 rej(new Error('cannot insert, db is null.'))
+            }
 
             // override mongodb auto _id
             if (!data._id)
                 data._id = Date.now();
 
-            this.db.collection(collectionName).insertOne(data, (err) => {
-                if (err)
-                    rej(new Error(`cannot insert: ${err}`));
+            this.db.collection(collectionName)
+                .insertOne(data, (err) => {
+                    if (err)
+                        rej(new Error(`cannot insert: ${err}`));
 
-                res(data._id);
-            });
+                    res(data._id);
+                });
         }));
     }
 
@@ -54,18 +67,21 @@ class Database extends EventEmitter {
      */
     delete(collectionName, fromTime) {
         return (new Promise((res, rej) => {
-            if (this.db == null)
+            if (this.db == null) {
+                this.isConnected = false;
                 rej(new Error('unable to delete, db is null.'))
+            }
 
-            var collection = this.db.collection(collectionName);
-            collection.deleteMany({
-                op: '<=',
-                val: fromTime
-            }, (err) => {
-                if (err)
-                    rej(err)
-                res();
-            });
+            this.db.collection(collectionName)
+                .deleteMany({
+                    "_id": {
+                        $lt: fromTime
+                    }
+                }, (err) => {
+                    if (err)
+                        rej(err)
+                    res();
+                });
         }));
     }
 
@@ -81,13 +97,15 @@ class Database extends EventEmitter {
         if (toDate == undefined)
             toDate = 9999999999999;
 
-        return (new Promise((res, rej) => {
-            if (this.db == null)
-                rej(new Error('unable to read, db is null.'))
 
-            var collection = this.db.collection(collectionName);
+        return (new Promise((res, rej) => {
+            if (this.db == null) {
+                this.isConnected = false;
+                rej(new Error('unable to read, db is null.'))
+            }
+
             res(
-                collection.find({
+                this.db.collection(collectionName).find({
                     "_id": {
                         $gte: fromDate,
                         $lt: toDate
