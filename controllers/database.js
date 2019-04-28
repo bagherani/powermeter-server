@@ -25,6 +25,7 @@ class Database extends EventEmitter {
                 if (err) {
                     this.isConnected = false;
                     rej(err);
+                    return;
                 }
 
                 this.db = client.db("pm");

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const config = require('../config.json')
+const config = require('../config.json');
+
 // get the settings page
 router.get('/', function (req, res) {
     res.setHeader('Content-Type', 'text/html');
@@ -11,10 +12,11 @@ router.get('/', function (req, res) {
 });
 
 // save the settings
-router.post('/', function (req, res) {
+router.post('/save-config', function (req, res) {
     res.end();
 });
 
+// get app configurations
 router.get('/get-config', function (req, res, next) {
     res.setHeader('Content-Type', 'application/json');
 

@@ -1,11 +1,84 @@
 <%+ extend('layout')%>
 
 <%+ section('headers')%>
-    <title>Settings</title>
+<title>Settings</title>
+<script src="/js/app/settingsServices.js"></script>
+<script src="/js/app/settingsCtrl.js"></script>
 <%+ endSection%>
 
 <%+ section('content')%>
 <div ng-app='app' ng-controller="settingsCtrl as self" class="container-fluid">
-    this is settings.
+
+    <div class="panel panel-primary" ng-repeat="p in settings">
+        <div class="panel-heading">
+            <h3 class="panel-title text-bold">
+                <strong ng-bind="p.name"></strong>
+            </h3>
+        </div>
+        <div class="panel-body">
+            <h4 class="text-primary">Powermeter config:</h4>
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-3">
+                    <div class="form-group">
+                        <input type="checkbox" id="chk{{p.id}}" ng-model="p.show">
+                        <label for="chk{{p.id}}">Visible</label>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Order</label>
+                        <input type="number" ng-model="p.order" class="form-control" placeholder="smaller shows first">
+                    </div>
+                </div>
+            </div>
+            <div ng-show="p.show" class="form-horizontal">
+                <h4 class="text-primary">Registers config:</h4>
+                <div class="row py-1" ng-repeat="r in p.registers track by $index" ng-class='{"bg-alt": $index%2==0}'>
+                    <div class="col-xs-2">
+                        <strong ng-bind="r.name" class="text-danger"></strong>
+                    </div>
+                    <div class="col-xs-3">
+                        <div class="row form-group">
+                            <label class="col-xs-4 control-label" for="{{p.id}}-{{r.name}}-show-type">Show type:</label>
+                            <div class="col-xs-8">
+                                <select ng-model="r.show" class="form-control" id="{{p.id}}-{{r.name}}-show-type">
+                                    <option value="none">hide</option>
+                                    <option value="number">number</option>
+                                    <option value="chart">chart</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-3">
+                        <div class="row form-group">
+                            <label class="col-xs-4 control-label" for="{{p.id}}-{{r.name}}-width">Width:</label>
+                            <div class="col-xs-8">
+                                <select ng-model="r.width" class="form-control" id="{{p.id}}-{{r.name}}-width">
+                                    <option value="0">not specified</option>
+                                    <option value="3">1/4 page width</option>
+                                    <option value="4">1/3 page width</option>
+                                    <option value="6">1/2 page width</option>
+                                    <option value="12">full page width</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-3">
+                        <div class="row form-group">
+                            <label class="col-xs-4 control-label" for="{{p.id}}-{{r.name}}-order">Show order:</label>
+                            <div class="col-xs-8">
+                                <input ng-model="r.order" type="number" placeholder="smaller shows first"
+                                    class="form-control" id="{{p.id}}-{{r.name}}-order" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
 </div>
 <%+ endSection%>

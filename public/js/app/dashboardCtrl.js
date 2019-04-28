@@ -2,10 +2,11 @@ app.controller("dashboardCtrl", [
     '$scope',
     '$timeout',
     'dashboardServices',
-    function ($scope, $timeout, services) {
+    'settingsServices',
+    function ($scope, $timeout, services, settingsServices) {
         $scope.powermeters = [];
 
-        services.getConfig()
+        settingsServices.getConfig()
             .then(function (res) {
                 var result = res.data;
                 $scope.powermeters = result.powermeters;
@@ -15,7 +16,7 @@ app.controller("dashboardCtrl", [
                 var socket = io($scope.socketPath);
 
                 socket.on('connect', function () {
-                    console.log('connected to ', $scope.socketPath)
+                    console.debug('connected to ', $scope.socketPath);
                 });
 
                 socket.on('message', function (message) {
@@ -46,7 +47,7 @@ app.controller("dashboardCtrl", [
                 });
 
                 socket.on('disconnect', function () {
-                    console.log('disconnected');
+                    console.debug('disconnected');
                     socket.off('message');
                 });
             });
