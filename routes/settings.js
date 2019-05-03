@@ -13,19 +13,27 @@ router.get('/', function (req, res) {
 
 // save the settings
 router.post('/save-config', function (req, res) {
-    res.end();
+    res.setHeader('Content-Type', 'application/json');
+
+    config.powermeters = req.body;
+    var fs = require('fs');
+    fs.writeFileSync(`${__dirname}/../config.json`, JSON.stringify(config, null, 4))
+
+    res.end(JSON.stringify({
+        success: true
+    }));
 });
 
 // get app configurations
 router.get('/get-config', function (req, res, next) {
     res.setHeader('Content-Type', 'application/json');
 
-    res.end(
-        JSON.stringify({
-            powermeters: config.powermeters,
-            serverPath: config.serverPath,
-            socketPort: config.socketPort
-        }));
+    res.end(JSON.stringify({
+        powermeters: config.powermeters,
+        serverPath: config.serverPath,
+        socketPort: config.socketPort,
+        monthToKeepData: config.monthToKeepData
+    }));
 });
 
 module.exports = router;

@@ -1,55 +1,76 @@
 app.controller("dashboardCtrl", [
     '$scope',
-    '$timeout',
+    '$interval',
     'dashboardServices',
     'settingsServices',
-    function ($scope, $timeout, services, settingsServices) {
-        $scope.powermeters = [];
+    function ($scope, $interval, services, settingsServices) {
 
-        settingsServices.getConfig()
-            .then(function (res) {
-                var result = res.data;
-                $scope.powermeters = result.powermeters;
+        var self = this;
 
-                $scope.socketPath = "http://" + result.serverPath + ":" + result.socketPort;
+        function init() {
+            $scope.powermeters = [];
+            getConfig();
 
-                var socket = io($scope.socketPath);
+            // reset the page every one hour
+            $interval(function () {
+                services.serverIsAlive()
+                    .then(res => {
+                        if (res.data.success)
+                            window.location.assign('/');
+                    }).catch(ex => { })
 
-                socket.on('connect', function () {
-                    console.debug('connected to ', $scope.socketPath);
-                });
+            }, 3600 * 1000)
+        }
 
-                socket.on('message', function (message) {
-                    if (!message)
-                        return;
+        function getConfig() {
+            settingsServices.getConfig()
+                .then(function (res) {
+                    var result = res.data;
+                    $scope.powermeters = result.powermeters;
 
-                    $scope.powermeters.forEach(function (pm) {
-                        var pmMessage = message.find(function (item) {
-                            return item.id == pm.id;
-                        })
+                    $scope.socketPath = "http://" + result.serverPath + ":" + result.socketPort;
 
-                        if (!pmMessage)
+                    var socket = io($scope.socketPath);
+
+                    socket.on('connect', function () {
+                        console.debug('connected to ', $scope.socketPath);
+                    });
+
+                    socket.on('message', function (message) {
+                        if (!message)
                             return;
 
-                        pm.registers.forEach(function (register) {
-                            var registerData = pmMessage.registers.find(function (item) {
-                                return item.address == register.address;
+                        $scope.powermeters.forEach(function (pm) {
+                            var pmMessage = message.find(function (item) {
+                                return item.id == pm.id;
                             })
 
-                            if (!registerData)
+                            if (!pmMessage)
                                 return;
 
-                            $timeout(function () {
-                                register.value = registerData.value;
-                            }, 1);
+                            pm.registers.forEach(function (register) {
+                                var registerData = pmMessage.registers.find(function (item) {
+                                    return item.address == register.address;
+                                })
+
+                                if (!registerData)
+                                    return;
+
+                                $timeout(function () {
+                                    register.value = registerData.value;
+                                }, 1);
+                            })
                         })
-                    })
+                    });
+
+                    socket.on('disconnect', function () {
+                        console.debug('disconnected');
+                        socket.off('message');
+                    });
                 });
 
-                socket.on('disconnect', function () {
-                    console.debug('disconnected');
-                    socket.off('message');
-                });
-            });
+        }
+
+        init();
 
     }]);

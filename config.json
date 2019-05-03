@@ -7,13 +7,17 @@
     "baudRate": 9600,
     "parity": "even",
     "serial": "ttyUSB0",
-    "powermeters": [{
+    "monthToKeepData": 6,
+    "powermeters": [
+        {
             "hasError": false,
             "message": "",
             "name": "Powemeter NO1",
             "id": 1,
             "show": true,
-            "registers": [{
+            "order": 1,
+            "registers": [
+                {
                     "name": "V 1",
                     "address": 3926,
                     "length": 2,
@@ -54,7 +58,7 @@
                     "max": 300,
                     "min": 0,
                     "width": "4",
-                    "show": "chart",
+                    "show": "none",
                     "order": 100
                 },
                 {
@@ -64,7 +68,7 @@
                     "value": 0,
                     "max": 300,
                     "min": 0,
-                    "width": "4",
+                    "width": "6",
                     "show": "chart",
                     "order": 101
                 },
@@ -75,7 +79,7 @@
                     "value": 0,
                     "max": 300,
                     "min": 0,
-                    "width": "4",
+                    "width": "6",
                     "show": "chart",
                     "order": 102
                 },
@@ -141,8 +145,10 @@
             "message": "",
             "name": "Powermeter NO2",
             "id": 2,
-            "show": true,
-            "registers": [{
+            "show": false,
+            "order": 2,
+            "registers": [
+                {
                     "name": "V 1",
                     "address": 3926,
                     "length": 2,

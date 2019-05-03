@@ -21,4 +21,11 @@ router.get('/', function (req, res, next) {
     res.render('dashboard', data)
 });
 
+router.get('/server-is-alive', function (req, res, next) {
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify({
+        success: true
+    }));
+});
+
 module.exports = router;

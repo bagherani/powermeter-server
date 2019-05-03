@@ -6,7 +6,7 @@ test('config exists', () => {
 });
 
 test('config has satisfying properties', () => {
-    var expectedProperties = ['mongoConnection', 'registerReadingInterval', 'serverPath', 'serverPort', 'socketPort', 'baudRate', 'parity', 'serial', 'powermeters'];
+    var expectedProperties = ['mongoConnection', 'registerReadingInterval', 'serverPath', 'serverPort', 'socketPort', 'baudRate', 'parity', 'serial', 'powermeters', 'monthToKeepData'];
 
     expectedProperties.forEach(key => {
         expect(config[key]).not.toBe(undefined);
@@ -19,7 +19,7 @@ test('config has powermeters', () => {
 });
 
 test('config powermeters have satisfying properties', () => {
-    var powermeterProperties = ['hasError', 'message', 'name', 'id', 'show', 'registers'];
+    var powermeterProperties = ['hasError', 'message', 'name', 'id', 'show', 'registers', 'order'];
 
     config.powermeters.forEach(p => {
         powermeterProperties.forEach((key, idx) => {

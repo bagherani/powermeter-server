@@ -40,13 +40,13 @@ class PowerMonitoring extends EventEmitter {
             baudRate: config.baudRate,
             parity: config.parity,
         }).then((promiseRes) => {
-            console.info('Connected to port:' + config.serial);
+            // console.info('Connected to port:' + config.serial);
             this.isConnected = true;
             this.emit('connected');
             // begin reading
             this.read(0, 0);
         }).catch((e) => {
-            console.error(`Error in connecting to port ${config.serial}`, e);
+            // console.error(`Error in connecting to port ${config.serial}`, e);
             this.isConnected = false;
             this.result.isSuccess = false;
             this.result.message = this.connectionErrorMsg;
@@ -93,13 +93,13 @@ class PowerMonitoring extends EventEmitter {
                 }
 
                 if (err) {
-                    console.error('Error reading register:', register, "full stack:", err);
+                    // console.error('Error reading register:', register, "full stack:", err);
                     currentPowermeter.hasError = true;
                     currentPowermeter.message = `Error reading register: ${register.name} address: ${register.address}`;
                 } else {
                     currentPowermeter.hasError = false;
                     this.result.isSuccess = true;
-                    register.value = parseFloat((this.float.readFloatBE([res.buffer[2], res.buffer[3], res.buffer[0], res.buffer[1]])).toFixed(2));
+                    register.value = parseFloat((float.readFloatBE([res.buffer[2], res.buffer[3], res.buffer[0], res.buffer[1]])).toFixed(2));
                 } // end of else
 
                 setTimeout(() => {
