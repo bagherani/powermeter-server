@@ -3,6 +3,8 @@ const Database = require('./database');
 const float = require('ieee-float');
 const config = require('../config.json');
 const ModbusRTU = require("modbus-serial");
+const schedule = require('node-schedule');
+const moment = require('moment');
 
 class PowerMonitoring extends EventEmitter {
 
@@ -28,6 +30,12 @@ class PowerMonitoring extends EventEmitter {
                 }, 2000);
             }
         }, 7000);
+
+        schedule.scheduleJob({ hour: 23, minute: 30, dayOfWeek: 0 }, function () {
+            config.powermeters.forEach(pm => {
+                Database.delete(`p${pm.id}`, moment().subtract(config.monthToKeepData, 'M').valueOf())
+            })
+        });
     }
 
     /** connect to port */
