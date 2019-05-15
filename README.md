@@ -6,3 +6,5 @@ powermeter server
 sudo npm start // sudo is important, otherwise serial port get error
 
 npm i mongodb@2.3.33
+
+/dev/ttyUSB0
