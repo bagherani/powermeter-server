@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const pm = require('../controllers/pm-monitoring');
-const db = require('../controllers/database');
-const moment = require('moment-jalaali');
 const config = require('../config.json');
 
 const io = require('socket.io').listen(config.socketPort);

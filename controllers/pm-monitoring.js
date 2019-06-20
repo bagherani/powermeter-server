@@ -10,7 +10,6 @@ class PowerMonitoring extends EventEmitter {
 
     constructor() {
         super();
-        Database.connect();
         this.result = {
             data: [/* config.powermeters */],
             isSuccess: true,
@@ -162,7 +161,7 @@ class PowerMonitoring extends EventEmitter {
         data.forEach((pm) => {
             var row = {};
             pm.registers.forEach((register) => {
-                row[register.address] = register.value;
+                row[register.name] = register.value;
             });
 
             Database.insert(`p${pm.id}`, row);

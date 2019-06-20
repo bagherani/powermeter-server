@@ -6,7 +6,7 @@ test('config exists', () => {
 });
 
 test('config has satisfying properties', () => {
-    var expectedProperties = ['mongoConnection', 'registerReadingInterval', 'serverPath', 'serverPort', 'socketPort', 'baudRate', 'parity', 'serial', 'powermeters', 'monthToKeepData'];
+    var expectedProperties = ['registerReadingInterval', 'serverPath', 'serverPort', 'socketPort', 'baudRate', 'parity', 'serial', 'powermeters', 'monthToKeepData'];
 
     expectedProperties.forEach(key => {
         expect(config[key]).not.toBe(undefined);

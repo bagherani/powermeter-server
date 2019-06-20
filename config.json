@@ -1,5 +1,4 @@
 {
-    "mongoConnection": "mongodb://localhost:27017",
     "registerReadingInterval": 1000,
     "serverPath": "127.0.0.1",
     "serverPort": 3000,

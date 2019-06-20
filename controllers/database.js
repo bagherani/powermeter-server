@@ -1,119 +1,96 @@
 const EventEmitter = require('events').EventEmitter;
-const MongoClient = require('mongodb').MongoClient;
-const connectionString = require('../config').mongoConnection;
+const sqlite3 = require('sqlite3');
+const config = require('../config.json');
+const db = {};
+
+config.powermeters.forEach(pm => {
+    var dbName = `p${pm.id}`;
+    if (db[dbName] != undefined)
+        return;
+
+    db[dbName] = new sqlite3.Database('../data/' + dbName + '.db');
+    db[dbName].run(`create table if not exists pm(
+        id   numeric primary key,
+        v1   numeric,
+        v2   numeric,
+        v3   numeric,
+        a1   numeric,
+        a2   numeric,
+        a3   numeric,
+        aavg numeric,
+        pf1  numeric,
+        pf2  numeric,
+        pf3  numeric,
+        pavg numeric);`, (err) => { });
+});
 
 class Database extends EventEmitter {
 
-    constructor() {
-        super();
+    insert(dbName, data) {
+        var params = {
+            $id: Date.now()
+        };
 
-        /**@type Db */
-        this.db = null;
-        this.isConnected = false;
+        Object.keys().forEach(key => {
+            params['$' + key.toLowerCase().replace(' ', '')] = data[key];
+        });
 
-        setInterval(() => {
-            this.connect();
-        }, 20000);
-    }
-
-    connect() {
-        if (this.isConnected)
-            return null;
-
-        return (new Promise((res, rej) => {
-            MongoClient.connect(connectionString, { useNewUrlParser: true }, (err, client) => {
-                if (err) {
-                    this.isConnected = false;
-                    rej(err);
-                    return;
+        db[dbName].run(
+            `insert into pm(id,v1,v2,v3,a1,a2,a3,aavg,pf1,pf2,pf3,pavg) values
+                ($id,$v1,$v2,$v3,$a1,$a2,$a3,$aavg,$pf1,$pf2,$pf3,$pfavg);`,
+            params,
+            err => {
+                if (err != null) {
+                    this.emit('INSERT_ERROR', err);
                 }
-
-                this.db = client.db("pm");
-                this.emit('connected');
-                this.isConnected = true;
-                res();
+                else {
+                    this.emit('INSERT_SUCCESS', params.$id);
+                }
             });
-        }));
-    }
-
-    /**
-     * insert `data` into `collectionName` and returns a number of inserted `_id` in the resolve function
-     * @param {string} collectionName 
-     * @param {} data 
-     */
-    insert(collectionName, data) {
-        return (new Promise((res, rej) => {
-            if (this.db == null) {
-                this.isConnected = false;
-                rej(new Error('cannot insert, db is null.'))
-            }
-
-            // override mongodb auto _id
-            if (!data._id)
-                data._id = Date.now();
-
-            this.db.collection(collectionName)
-                .insertOne(data, (err) => {
-                    if (err)
-                        rej(new Error(`cannot insert: ${err}`));
-
-                    res(data._id);
-                });
-        }));
     }
 
     /**
      * delete records from all collections older than `fromTime` value
      * @param {number} fromTime
      */
-    delete(collectionName, fromTime) {
-        return (new Promise((res, rej) => {
-            if (this.db == null) {
-                this.isConnected = false;
-                rej(new Error('unable to delete, db is null.'))
-            }
+    delete(dbName, fromTime) {
+        var params = {
+            $id: fromTime
+        };
 
-            this.db.collection(collectionName)
-                .deleteMany({
-                    "_id": {
-                        $lt: fromTime
-                    }
-                }, (err) => {
-                    if (err)
-                        rej(err)
-                    res();
-                });
-        }));
+        db[dbName].run(`delete from pm where id <= $id;`,
+            params,
+            err => {
+                if (err != null)
+                    this.emit('DELETE_ERROR');
+                else
+                    this.emit('DELETE_SUCCESS');
+                db[dbName].run('vacuum;', err => { });
+            });
     }
 
     /**
      * get a cursor of all records of the given `collectionName` in the give date range.
-     * @param {string} collectionName 
+     * @param {string} dbName 
      * @param {number} fromDate 
      * @param {number} toDate 
      */
-    find(collectionName, fromDate, toDate) {
+    read(dbName, fromDate, toDate) {
         if (fromDate == undefined)
             fromDate = 0;
         if (toDate == undefined)
             toDate = 9999999999999;
 
-
-        return (new Promise((res, rej) => {
-            if (this.db == null) {
-                this.isConnected = false;
-                rej(new Error('unable to read, db is null.'))
+        db[dbName].each(`select * from pm where id between $from and $to`, {
+            $from: fromDate,
+            $to: toDate
+        }, (err, row) => {
+            if (err != null) {
             }
-
-            res(
-                this.db.collection(collectionName).find({
-                    "_id": {
-                        $gte: fromDate,
-                        $lt: toDate
-                    }
-                })
-            );
-        }));
+            else {
+                this.emit('READ_SUCCESS', row);
+            }
+        });
     }
 
 }
