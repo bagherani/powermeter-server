@@ -5,7 +5,7 @@
     "socketPort": 3001,
     "baudRate": 9600,
     "parity": "even",
-    "serial": "ttyUSB0",
+    "serial": "COM3",
     "monthToKeepData": 6,
     "powermeters": [
         {
@@ -19,73 +19,73 @@
             "registers": [
                 {
                     "name": "V 1",
-                    "address": 3926,
+                    "address": 3027,
                     "length": 2,
-                    "value": 0,
+                    "value": "224.00",
                     "max": 250,
                     "min": 210,
-                    "width": "3",
-                    "show": "number",
+                    "width": "4",
+                    "show": "chart",
                     "order": 3
                 },
                 {
                     "name": "V 2",
-                    "address": 3940,
+                    "address": 3029,
                     "length": 2,
-                    "value": 0,
+                    "value": "95.35",
                     "max": 250,
                     "min": 210,
-                    "width": "3",
-                    "show": "number",
+                    "width": "4",
+                    "show": "chart",
                     "order": 4
                 },
                 {
                     "name": "V 3",
-                    "address": 3954,
+                    "address": 3031,
                     "length": 2,
-                    "value": 0,
+                    "value": "0.00",
                     "max": 250,
                     "min": 210,
-                    "width": "3",
-                    "show": "number",
+                    "width": "4",
+                    "show": "chart",
                     "order": 5
                 },
                 {
                     "name": "A 1",
-                    "address": 3928,
+                    "address": 2999,
                     "length": 2,
-                    "value": 0,
+                    "value": "0.00",
                     "max": 300,
                     "min": 0,
                     "width": "4",
-                    "show": "chart",
+                    "show": "number",
                     "order": 0
                 },
                 {
                     "name": "A 2",
-                    "address": 3942,
+                    "address": 3001,
                     "length": 2,
-                    "value": 0,
+                    "value": "0.00",
                     "max": 300,
                     "min": 0,
                     "width": "4",
-                    "show": "chart",
+                    "show": "number",
                     "order": 1
                 },
                 {
                     "name": "A 3",
-                    "address": 3956,
+                    "address": 3003,
                     "length": 2,
-                    "value": 0,
+                    "value": "0.00",
                     "max": 300,
                     "min": 0,
                     "width": "4",
-                    "show": "chart",
+                    "show": "number",
                     "order": 2
                 },
                 {
                     "name": "A AVG",
-                    "address": 3912,
+                    "address": 3009,
                     "length": 2,
                     "value": 0,
                     "max": 300,
@@ -96,9 +96,9 @@
                 },
                 {
                     "name": "PF 1",
-                    "address": 3922,
+                    "address": 3077,
                     "length": 2,
-                    "value": 0,
+                    "value": "NaN",
                     "max": 10,
                     "min": -10,
                     "width": "3",
@@ -107,9 +107,9 @@
                 },
                 {
                     "name": "PF 2",
-                    "address": 3936,
+                    "address": 3079,
                     "length": 2,
-                    "value": 0,
+                    "value": "NaN",
                     "max": 10,
                     "min": -10,
                     "width": "3",
@@ -118,9 +118,9 @@
                 },
                 {
                     "name": "PF 3",
-                    "address": 3950,
+                    "address": 3081,
                     "length": 2,
-                    "value": 0,
+                    "value": "NaN",
                     "max": 10,
                     "min": -10,
                     "width": "3",
@@ -129,9 +129,9 @@
                 },
                 {
                     "name": "PF AVG",
-                    "address": 3906,
+                    "address": 3083,
                     "length": 2,
-                    "value": 0,
+                    "value": "NaN",
                     "max": 10,
                     "min": -10,
                     "width": "3",
@@ -151,124 +151,124 @@
             "registers": [
                 {
                     "name": "V 1",
-                    "address": 3926,
+                    "address": 3027,
                     "length": 2,
-                    "value": 0,
+                    "value": "223.94",
                     "max": 250,
                     "min": 210,
                     "width": "3",
                     "show": "number",
-                    "order": 200
+                    "order": 0
                 },
                 {
                     "name": "V 2",
-                    "address": 3940,
+                    "address": 3029,
                     "length": 2,
-                    "value": 0,
+                    "value": "153.85",
                     "max": 250,
                     "min": 210,
                     "width": "3",
                     "show": "number",
-                    "order": 201
+                    "order": 1
                 },
                 {
                     "name": "V 3",
-                    "address": 3954,
+                    "address": 3031,
                     "length": 2,
-                    "value": 0,
+                    "value": "85.86",
                     "max": 250,
                     "min": 210,
                     "width": "3",
                     "show": "number",
-                    "order": 202
+                    "order": 2
                 },
                 {
                     "name": "A 1",
-                    "address": 3928,
+                    "address": 2999,
                     "length": 2,
-                    "value": 0,
+                    "value": "0.00",
                     "max": 300,
                     "min": 0,
                     "width": "4",
                     "show": "chart",
-                    "order": 100
+                    "order": 3
                 },
                 {
                     "name": "A 2",
-                    "address": 3942,
+                    "address": 3001,
                     "length": 2,
-                    "value": 0,
+                    "value": "0.00",
                     "max": 300,
                     "min": 0,
                     "width": "4",
                     "show": "chart",
-                    "order": 101
+                    "order": 4
                 },
                 {
                     "name": "A 3",
-                    "address": 3956,
+                    "address": 3003,
                     "length": 2,
-                    "value": 0,
+                    "value": "0.00",
                     "max": 300,
                     "min": 0,
                     "width": "4",
                     "show": "chart",
-                    "order": 102
+                    "order": 5
                 },
                 {
                     "name": "A AVG",
-                    "address": 3912,
+                    "address": 3009,
                     "length": 2,
-                    "value": 0,
+                    "value": "0.00",
                     "max": 300,
                     "min": 0,
                     "width": "3",
                     "show": "number",
-                    "order": 0
+                    "order": 7
                 },
                 {
                     "name": "PF 1",
-                    "address": 3922,
+                    "address": 3077,
                     "length": 2,
-                    "value": 0,
+                    "value": "NaN",
                     "max": 10,
                     "min": -10,
                     "width": "3",
                     "show": "number",
-                    "order": 0
+                    "order": 8
                 },
                 {
                     "name": "PF 2",
-                    "address": 3936,
+                    "address": 3079,
                     "length": 2,
-                    "value": 0,
+                    "value": "NaN",
                     "max": 10,
                     "min": -10,
                     "width": "3",
                     "show": "number",
-                    "order": 0
+                    "order": 9
                 },
                 {
                     "name": "PF 3",
-                    "address": 3950,
+                    "address": 3081,
                     "length": 2,
-                    "value": 0,
+                    "value": "NaN",
                     "max": 10,
                     "min": -10,
                     "width": "3",
                     "show": "number",
-                    "order": 0
+                    "order": 10
                 },
                 {
                     "name": "PF AVG",
-                    "address": 3906,
+                    "address": 3083,
                     "length": 2,
-                    "value": 0,
+                    "value": "NaN",
                     "max": 10,
                     "min": -10,
                     "width": "3",
                     "show": "number",
-                    "order": 205
+                    "order": 11
                 }
             ]
         }

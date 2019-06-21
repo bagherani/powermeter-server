@@ -31,7 +31,7 @@ class Database extends EventEmitter {
             $id: Date.now()
         };
 
-        Object.keys().forEach(key => {
+        Object.keys(data).forEach(key => {
             params['$' + key.toLowerCase().replace(' ', '')] = data[key];
         });
 

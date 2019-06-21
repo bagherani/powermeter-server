@@ -1,9 +1,10 @@
 app.controller("dashboardCtrl", [
     '$scope',
+    '$timeout',
     '$interval',
     'dashboardServices',
     'settingsServices',
-    function ($scope, $interval, services, settingsServices) {
+    function ($scope, $timeout, $interval, services, settingsServices) {
 
         function init() {
             $scope.powermeters = [];

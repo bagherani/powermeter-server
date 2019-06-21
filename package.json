@@ -13,7 +13,6 @@
     "ejs": "2.5.7",
     "ejs-layout": "1.0.15",
     "express": "4.15.5",
-    "ieee-float": "0.6.0",
     "modbus-serial": "7.2.2",
     "moment": "2.22.2",
     "moment-jalaali": "0.7.4",

@@ -52,8 +52,8 @@ app.directive('unit', [function () {
             scope.$watch(function () {
                 return ngModel.$modelValue;
             }, function (newVal) {
-                if (!isNaN(newVal)) {
-                    var val = parseFloat(newVal.toFixed(2));
+                if (newVal != null && !isNaN(newVal)) {
+                    var val = parseFloat(newVal).toFixed(2);
                     scope.ngModel = val;
 
                     scope.data.push(val);
