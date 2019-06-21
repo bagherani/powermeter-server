@@ -23,9 +23,9 @@
                     "value": 0,
                     "max": 250,
                     "min": 210,
-                    "width": "3",
+                    "width": "1",
                     "show": "number",
-                    "order": 200
+                    "order": 1
                 },
                 {
                     "name": "V 2",
@@ -34,9 +34,9 @@
                     "value": 0,
                     "max": 250,
                     "min": 210,
-                    "width": "3",
+                    "width": "1",
                     "show": "number",
-                    "order": 201
+                    "order": 2
                 },
                 {
                     "name": "V 3",
@@ -45,9 +45,9 @@
                     "value": 0,
                     "max": 250,
                     "min": 210,
-                    "width": "3",
+                    "width": "1",
                     "show": "number",
-                    "order": 202
+                    "order": 3
                 },
                 {
                     "name": "A 1",
@@ -56,9 +56,9 @@
                     "value": 0,
                     "max": 300,
                     "min": 0,
-                    "width": "4",
-                    "show": "none",
-                    "order": 100
+                    "width": "2",
+                    "show": "chart",
+                    "order": 0
                 },
                 {
                     "name": "A 2",
@@ -67,9 +67,9 @@
                     "value": 0,
                     "max": 300,
                     "min": 0,
-                    "width": "6",
-                    "show": "chart",
-                    "order": 101
+                    "width": "1",
+                    "show": "number",
+                    "order": 5
                 },
                 {
                     "name": "A 3",
@@ -78,9 +78,9 @@
                     "value": 0,
                     "max": 300,
                     "min": 0,
-                    "width": "6",
-                    "show": "chart",
-                    "order": 102
+                    "width": "1",
+                    "show": "number",
+                    "order": 6
                 },
                 {
                     "name": "A AVG",
@@ -89,9 +89,9 @@
                     "value": 0,
                     "max": 300,
                     "min": 0,
-                    "width": "0",
-                    "show": "none",
-                    "order": 0
+                    "width": "1",
+                    "show": "number",
+                    "order": 7
                 },
                 {
                     "name": "PF 1",
@@ -100,9 +100,9 @@
                     "value": 0,
                     "max": 10,
                     "min": -10,
-                    "width": "0",
-                    "show": "none",
-                    "order": 0
+                    "width": "1",
+                    "show": "number",
+                    "order": 8
                 },
                 {
                     "name": "PF 2",
@@ -111,9 +111,9 @@
                     "value": 0,
                     "max": 10,
                     "min": -10,
-                    "width": "0",
-                    "show": "none",
-                    "order": 0
+                    "width": "1",
+                    "show": "number",
+                    "order": 9
                 },
                 {
                     "name": "PF 3",
@@ -122,9 +122,9 @@
                     "value": 0,
                     "max": 10,
                     "min": -10,
-                    "width": "0",
-                    "show": "none",
-                    "order": 0
+                    "width": "1",
+                    "show": "number",
+                    "order": 10
                 },
                 {
                     "name": "PF AVG",
@@ -133,9 +133,9 @@
                     "value": 0,
                     "max": 10,
                     "min": -10,
-                    "width": "3",
+                    "width": "1",
                     "show": "number",
-                    "order": 205
+                    "order": 11
                 }
             ]
         },
@@ -144,7 +144,7 @@
             "message": "",
             "name": "Powermeter NO2",
             "id": 2,
-            "show": false,
+            "show": true,
             "order": 2,
             "registers": [
                 {

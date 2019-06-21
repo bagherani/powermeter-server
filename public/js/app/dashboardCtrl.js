@@ -5,8 +5,6 @@ app.controller("dashboardCtrl", [
     'settingsServices',
     function ($scope, $interval, services, settingsServices) {
 
-        var self = this;
-
         function init() {
             $scope.powermeters = [];
             getConfig();

@@ -12,7 +12,7 @@
 <div ng-app='app' ng-controller="dashboardCtrl as self" class="container-fluid">
     <div class="row" ng-repeat="pm in powermeters | orderBy: 'order'">
         <div class="col-md-12 powermeter__container" ng-show="pm.show">
-            <a class="btn btn-success btn-download" style="margin-top: 10px" href="/download?id={{pm.id}}">Download</a>
+            <a class="btn btn-default btn-download" style="margin-top: 10px" href="/download?id={{pm.id}}">Download</a>
             <h3 ng-bind="pm.name" class="powermeter__title"></h3>
             <div unit ng-repeat="register in pm.registers | orderBy: 'order'"
                 ng-id="pm.id+'_'+register.address"

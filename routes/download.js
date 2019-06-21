@@ -26,35 +26,38 @@ function writeToCsv(drivePath, pm) {
 
         writer.write('Date,Year,Month,Day,Time,V1,V2,V3,A1,A2,A3,A_Average,PF1,PF2,PF3,PF_Average\n');
 
-        var rowsPromise = db.read(pm);
+        db.off('READ_SUCCESS');
+        db.off('READ_DONE');
+        db.off('READ_ERROR');
+        db.read(pm);
         var readCounter = 0;
         var writeCounter = 0;
-        rowsPromise.then(rows => {
-            rows.forEach(function (row) {
-                readCounter++;
-
-                var date = moment(row['id']);
-
-                writer.write(`${date.format('jYYYY/jMM/jDD HH:mm:ss')},${date.format('jYYYY')},${date.format('jMM')},${date.format('jDD')},${date.format('HH:mm:ss')},${row['3926']},${row['3940']},${row['3954']},${row['3928']},${row['3942']},${row['3956']},${row['3912']},${row['3922']},${row['3936']},${row['3950']},${row['3906']}\n`,
-                    function () {
-                        writeCounter++;
-                    });
-            }, function (er) {
-                if (er)
-                    rej(er);
-
-                rows.close();
-
-                var interval = setInterval(function () {
-                    if (readCounter == writeCounter) {
-                        clearInterval(interval);
-                        writer.close();
-                        res();
-                    }
-                }, 1000);
-            });
-        })
-
+        db.off('READ_ERROR', (err) => {
+            db.off('READ_SUCCESS');
+            db.off('READ_DONE');
+            db.off('READ_ERROR');
+            rej(err);
+        });
+        db.on('READ_SUCCESS', (row) => {
+            readCounter++;
+            var date = moment(row.id);
+            writer.write(`${date.format('jYYYY/jMM/jDD HH:mm:ss')},${date.format('jYYYY')},${date.format('jMM')},${date.format('jDD')},${date.format('HH:mm:ss')},${row.v1},${row.v2},${row.v3},${row.a1},${row.a2},${row.a3},${row.aavg},${row.pf1},${row.pf2},${row.pf3},${row.pfavg}\n`,
+                () => {
+                    writeCounter++;
+                });
+        });
+        db.on('READ_DONE', () => {
+            var interval = setInterval(() => {
+                if (readCounter == writeCounter) {
+                    clearInterval(interval);
+                    writer.close();
+                    db.off('READ_SUCCESS');
+                    db.off('READ_DONE');
+                    db.off('READ_ERROR');
+                    res();
+                }
+            }, 1000);
+        });
     });
 }
 

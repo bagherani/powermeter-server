@@ -8,7 +8,7 @@ config.powermeters.forEach(pm => {
     if (db[dbName] != undefined)
         return;
 
-    db[dbName] = new sqlite3.Database('../data/' + dbName + '.db');
+    db[dbName] = new sqlite3.Database(`${__dirname}/../data/${dbName}.db`);
     db[dbName].run(`create table if not exists pm(
         id   numeric primary key,
         v1   numeric,
@@ -81,16 +81,27 @@ class Database extends EventEmitter {
         if (toDate == undefined)
             toDate = 9999999999999;
 
-        db[dbName].each(`select * from pm where id between $from and $to`, {
+        var count = 0;
+        var params = {
             $from: fromDate,
             $to: toDate
-        }, (err, row) => {
-            if (err != null) {
-            }
-            else {
-                this.emit('READ_SUCCESS', row);
-            }
+        };
+
+        db[dbName].run(`select count(*) cnt from pm where id between $from and $to`, params, (err, row) => {
+            count = row.ctn;
+            db[dbName].each(`select * from pm where id between $from and $to`, params, (err, row) => {
+                if (err != null) {
+                    this.emit('READ_ERROR', err);
+                }
+                else {
+                    count--;
+                    this.emit('READ_SUCCESS', row);
+                    if (count <= 0)
+                        this.emit('READ_DONE');
+                }
+            });
         });
+
     }
 
 }

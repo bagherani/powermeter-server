@@ -7,12 +7,6 @@ describe('db test', () => {
 
     beforeAll(async () => {
         id = Math.random();
-
-        await db.connect()
-            .then(res => { })
-            .catch(err => {
-                assert(err == null, `error connecting to mongodb: ${err}`);
-            });
     });
 
     it('can insert', async () => {
