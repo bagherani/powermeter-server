@@ -26,6 +26,14 @@
                         <label for="">Order</label>
                         <input type="number" ng-model="p.order" class="form-control" placeholder="smaller shows first">
                     </div>
+                    <div class="form-group">
+                        <label for="{{p.id}}-{{p.name}}-width">Width:</label>
+                        <select ng-model="p.width" class="form-control col-xs-4" id="{{p.id}}-{{p.name}}-width">
+                            <option value="0">not specified</option>
+                            <option value="{{w}}" ng-repeat="w in [1,2,3,4,5,6,7,8,9,10,11,12]">{{w}}/12 page width
+                            </option>
+                        </select>
+                    </div>
                 </div>
             </div>
             <div ng-show="p.show" class="form-horizontal">
@@ -53,7 +61,8 @@
                             <div class="col-xs-8">
                                 <select ng-model="r.width" class="form-control" id="{{p.id}}-{{r.name}}-width">
                                     <option value="0">not specified</option>
-                                    <option value="{{w}}" ng-repeat="w in [1,2,3,4,5,6,7,8,9,10,11,12]">{{w}}/12 page width</option>
+                                    <option value="{{w}}" ng-repeat="w in [1,2,3,4,5,6,7,8,9,10,11,12]">{{w}}/12 page
+                                        width</option>
                                 </select>
                             </div>
                         </div>

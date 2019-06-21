@@ -56,7 +56,7 @@ ul {
   list-style: none;
   font-size: 0;
   font-weight: bold;
-  margin-bottom: 30px;
+  margin-bottom: 15px;
   li {
     display: inline-block;
     font-size: 12pt;
@@ -90,31 +90,24 @@ ul {
 }
 
 .powermeter__container {
-  padding-top: 0px;
-  padding-bottom: 15px;
+  padding-top: 10px;
+  padding-bottom: 4px;
+  background: #fff;
+  box-shadow: 0px 1px 2px rgba(#000,.1);
+
   .powermeter__title {
     font-weight: bold;
-    font-size: 14pt;
-    color: #000;
-    text-shadow: -1px -1px 1px #fff;
-  }
-  &:after {
-    // content: '';
-    height: 1px;
-    background-color: #ddd;
-    display: block;
-    margin: 0 auto;
+    font-size: 13pt;
+    margin:-4px 5px 0 4px;
+    color: #1e0090;
   }
 }
 
 .unit__container {
   padding: 5px;
-  // border: 1px solid #d8d8d8;
-  background: #fff;
   margin-top: 4px;
   margin-bottom: 4px;
-  border-radius: 0px;
-  box-shadow: 0px 1px 2px rgba(#000,.1);
+  border:1px solid rgba(#000,.1);
 
   .chart {
     margin-top: 15px;
@@ -184,8 +177,8 @@ input[type="range"]::-webkit-slider-thumb {
 
 .btn-download{
   position: absolute;
-  right: 15px;
-  top:5px;
+  right: 4px;
+  top:4px;
   z-index: 10;
 }
 

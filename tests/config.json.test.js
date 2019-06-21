@@ -19,7 +19,7 @@ test('config has powermeters', () => {
 });
 
 test('config powermeters have satisfying properties', () => {
-    var powermeterProperties = ['hasError', 'message', 'name', 'id', 'show', 'registers', 'order'];
+    var powermeterProperties = ['hasError', 'message', 'name', 'width', 'id', 'show', 'registers', 'order'];
 
     config.powermeters.forEach(p => {
         powermeterProperties.forEach((key, idx) => {

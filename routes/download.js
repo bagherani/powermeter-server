@@ -26,16 +26,11 @@ function writeToCsv(drivePath, pm) {
 
         writer.write('Date,Year,Month,Day,Time,V1,V2,V3,A1,A2,A3,A_Average,PF1,PF2,PF3,PF_Average\n');
 
-        db.off('READ_SUCCESS');
-        db.off('READ_DONE');
-        db.off('READ_ERROR');
         db.read(pm);
         var readCounter = 0;
         var writeCounter = 0;
-        db.off('READ_ERROR', (err) => {
-            db.off('READ_SUCCESS');
-            db.off('READ_DONE');
-            db.off('READ_ERROR');
+        db.removeAllListeners();
+        db.on('READ_ERROR', (err) => {
             rej(err);
         });
         db.on('READ_SUCCESS', (row) => {
@@ -51,9 +46,6 @@ function writeToCsv(drivePath, pm) {
                 if (readCounter == writeCounter) {
                     clearInterval(interval);
                     writer.close();
-                    db.off('READ_SUCCESS');
-                    db.off('READ_DONE');
-                    db.off('READ_ERROR');
                     res();
                 }
             }, 1000);

@@ -87,7 +87,15 @@ class Database extends EventEmitter {
             $to: toDate
         };
 
-        db[dbName].run(`select count(*) cnt from pm where id between $from and $to`, params, (err, row) => {
+        db[dbName].run(`select count(*) as cnt from pm where id between $from and $to`, params, (err, row) => {
+            if (err != null) {
+                this.emit('READ_ERROR', err);
+                return;
+            }
+            if (row == undefined) {
+                this.emit('READ_DONE');
+                return;
+            }
             count = row.ctn;
             db[dbName].each(`select * from pm where id between $from and $to`, params, (err, row) => {
                 if (err != null) {
