@@ -18,7 +18,7 @@ app.controller("dashboardCtrl", [
                             window.location.assign('/');
                     }).catch(ex => { })
 
-            }, 3600 * 1000)
+            }, 1800 * 1000)
         }
 
         function getConfig() {

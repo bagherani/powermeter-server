@@ -147,8 +147,8 @@ class PowerMonitoring extends EventEmitter {
                 }
                 // read next registers
                 this.read(powerMeterIndex, registerIndex);
-            }, 1);
-        }, 1300)
+            }, 100);
+        }, 2000)
 
     }
 

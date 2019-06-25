@@ -5,7 +5,7 @@
     "socketPort": 3001,
     "baudRate": 9600,
     "parity": "even",
-    "serial": "COM3",
+    "serial": "/dev/ttyUSB0",
     "monthToKeepData": 6,
     "powermeters": [
         {

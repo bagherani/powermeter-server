@@ -23,7 +23,7 @@ config.powermeters.forEach(pm => {
         pf3  numeric,
         pavg numeric);`, (err) => { });
 });
-
+var objectKeys = [];
 class Database extends EventEmitter {
 
     insert(dbName, data) {
@@ -31,7 +31,10 @@ class Database extends EventEmitter {
             $id: Date.now()
         };
 
-        Object.keys(data).forEach(key => {
+        if (objectKeys.length == 0)
+            objectKeys = Object.keys(data);
+
+        objectKeys.forEach(key => {
             params['$' + key.toLowerCase().replace(' ', '')] = data[key];
         });
 
@@ -40,6 +43,7 @@ class Database extends EventEmitter {
                 ($id,$v1,$v2,$v3,$a1,$a2,$a3,$aavg,$pf1,$pf2,$pf3,$pfavg);`,
             params,
             err => {
+                params = null;
                 if (err != null) {
                     this.emit('INSERT_ERROR', err);
                 }
