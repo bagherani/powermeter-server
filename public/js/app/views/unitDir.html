@@ -1,10 +1,12 @@
 <div class="unit__container">
     <div class="unit-info">
-        <span class="unit-title" ng-bind="ngTitle"></span>:
+        <a class="unit-title" ng-bind="ngTitle" data-toggle="modal" data-target="#historyModal" ng-click="setClickedRegister()" href="#"></a>:
         <span class="unit-value" ng-bind="ngModel"></span>
     </div>
-    <canvas id="chart{{ngId}}" style="width: 100%; height: 130px" class="chart chart-line" chart-data="data"
-        ng-if="ngShowChart" chart-labels="labels" chart-series="series" chart-options="options"
-        chart-dataset-override="datasetOverride">
-    </canvas>
+    <div class="chart__contianer" ng-if="ngShowChart">
+        <canvas id="chart{{ngId}}" width="1300" height="130" class="chart chart-line" chart-data="data"
+            ng-if="ngShowChart" chart-labels="labels" chart-series="series" chart-options="options"
+            chart-colors="colors" chart-dataset-override="datasetOverride">
+        </canvas>
+    </div>
 </div>

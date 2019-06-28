@@ -15,16 +15,16 @@
             "id": 1,
             "show": true,
             "order": 1,
-            "width": "6",
+            "width": "12",
             "registers": [
                 {
                     "name": "V 1",
                     "address": 3027,
                     "length": 2,
-                    "value": "224.00",
+                    "value": "224.87",
                     "max": 250,
                     "min": 210,
-                    "width": "4",
+                    "width": "12",
                     "show": "chart",
                     "order": 3
                 },
@@ -32,11 +32,11 @@
                     "name": "V 2",
                     "address": 3029,
                     "length": 2,
-                    "value": "95.35",
+                    "value": "96.16",
                     "max": 250,
                     "min": 210,
                     "width": "4",
-                    "show": "chart",
+                    "show": "none",
                     "order": 4
                 },
                 {
@@ -47,7 +47,7 @@
                     "max": 250,
                     "min": 210,
                     "width": "4",
-                    "show": "chart",
+                    "show": "none",
                     "order": 5
                 },
                 {
@@ -87,11 +87,11 @@
                     "name": "A AVG",
                     "address": 3009,
                     "length": 2,
-                    "value": 0,
+                    "value": "0.00",
                     "max": 300,
                     "min": 0,
                     "width": "3",
-                    "show": "number",
+                    "show": "none",
                     "order": 7
                 },
                 {
@@ -102,7 +102,7 @@
                     "max": 10,
                     "min": -10,
                     "width": "3",
-                    "show": "number",
+                    "show": "none",
                     "order": 8
                 },
                 {
@@ -113,7 +113,7 @@
                     "max": 10,
                     "min": -10,
                     "width": "3",
-                    "show": "number",
+                    "show": "none",
                     "order": 9
                 },
                 {
@@ -124,7 +124,7 @@
                     "max": 10,
                     "min": -10,
                     "width": "3",
-                    "show": "number",
+                    "show": "none",
                     "order": 10
                 },
                 {
@@ -135,7 +135,7 @@
                     "max": 10,
                     "min": -10,
                     "width": "3",
-                    "show": "number",
+                    "show": "none",
                     "order": 11
                 }
             ]
@@ -147,39 +147,39 @@
             "id": 2,
             "show": true,
             "order": 2,
-            "width": "6",
+            "width": "12",
             "registers": [
                 {
                     "name": "V 1",
                     "address": 3027,
                     "length": 2,
-                    "value": "223.94",
+                    "value": "225.37",
                     "max": 250,
                     "min": 210,
-                    "width": "3",
-                    "show": "number",
+                    "width": "12",
+                    "show": "chart",
                     "order": 0
                 },
                 {
                     "name": "V 2",
                     "address": 3029,
                     "length": 2,
-                    "value": "153.85",
+                    "value": "154.85",
                     "max": 250,
                     "min": 210,
-                    "width": "3",
-                    "show": "number",
+                    "width": "6",
+                    "show": "chart",
                     "order": 1
                 },
                 {
                     "name": "V 3",
                     "address": 3031,
                     "length": 2,
-                    "value": "85.86",
+                    "value": "86.38",
                     "max": 250,
                     "min": 210,
-                    "width": "3",
-                    "show": "number",
+                    "width": "6",
+                    "show": "chart",
                     "order": 2
                 },
                 {
@@ -190,7 +190,7 @@
                     "max": 300,
                     "min": 0,
                     "width": "4",
-                    "show": "chart",
+                    "show": "none",
                     "order": 3
                 },
                 {
@@ -201,7 +201,7 @@
                     "max": 300,
                     "min": 0,
                     "width": "4",
-                    "show": "chart",
+                    "show": "none",
                     "order": 4
                 },
                 {
@@ -212,7 +212,7 @@
                     "max": 300,
                     "min": 0,
                     "width": "4",
-                    "show": "chart",
+                    "show": "none",
                     "order": 5
                 },
                 {
@@ -223,7 +223,7 @@
                     "max": 300,
                     "min": 0,
                     "width": "3",
-                    "show": "number",
+                    "show": "none",
                     "order": 7
                 },
                 {
@@ -234,7 +234,7 @@
                     "max": 10,
                     "min": -10,
                     "width": "3",
-                    "show": "number",
+                    "show": "none",
                     "order": 8
                 },
                 {
@@ -245,7 +245,7 @@
                     "max": 10,
                     "min": -10,
                     "width": "3",
-                    "show": "number",
+                    "show": "none",
                     "order": 9
                 },
                 {
@@ -256,7 +256,7 @@
                     "max": 10,
                     "min": -10,
                     "width": "3",
-                    "show": "number",
+                    "show": "none",
                     "order": 10
                 },
                 {
@@ -267,7 +267,7 @@
                     "max": 10,
                     "min": -10,
                     "width": "3",
-                    "show": "number",
+                    "show": "none",
                     "order": 11
                 }
             ]

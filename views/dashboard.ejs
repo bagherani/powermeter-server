@@ -1,11 +1,11 @@
 <%+ extend('layout')%>
 
 <%+ section('headers')%>
-    <title>Dashboard</title>
-    <script src="/js/app/unitDir.js"></script>
-    <script src="/js/app/dashboardServices.js"></script>
-    <script src="/js/app/settingsServices.js"></script>
-    <script src="/js/app/dashboardCtrl.js"></script>
+<title>Dashboard</title>
+<script src="/js/app/unitDir.js"></script>
+<script src="/js/app/dashboardServices.js"></script>
+<script src="/js/app/settingsServices.js"></script>
+<script src="/js/app/dashboardCtrl.js"></script>
 <%+ endSection%>
 
 <%+ section('content')%>
@@ -14,17 +14,53 @@
         <div class="col-xs-12 powermeter__container" ng-show="pm.show">
             <a class="btn btn-download btn-link btn-xs" href="/download?id={{pm.id}}">Download</a>
             <h3 ng-bind="pm.name" class="powermeter__title"></h3>
-            <div unit ng-repeat="register in pm.registers | orderBy: 'order'"
-                ng-id="pm.id+'_'+register.address"
-                ng-model="register.value"
-                ng-title="register.name",
-                ng-show-chart="register.show=='chart'",
-                ng-hide="register.show=='none'"
-                ng-min="register.min"
-                ng-max="register.max"
-                class="col-xs-{{register.width}}">
+            <div unit ng-repeat="register in pm.registers | orderBy: 'order'" ng-pm="pm.id"
+                ng-id="pm.id+'_'+register.address" ng-model="register.value" ng-title="register.name" ,
+                ng-show-chart="register.show=='chart'" , ng-hide="register.show=='none'" ng-min="register.min"
+                ng-max="register.max" class="col-xs-{{register.width}}">
             </div>
         </div>
     </div>
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="historyModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Register history:&nbsp;
+                        <strong ng-bind="clickedRegister"></strong>
+                        <span ng-if="isLoading">Loading...</span>
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    Please Click:
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button ng-click="loadHistory(1)" type="button"
+                            ng-class="{'btn-success': historyChartTime == 1}" class="btn btn-default">Last 24
+                            hours</button>
+                        <button ng-click="loadHistory(7)" type="button"
+                            ng-class="{'btn-success': historyChartTime == 7}" class="btn btn-default">Last
+                            week</button>
+                        <button ng-click="loadHistory(31)" type="button"
+                            ng-class="{'btn-success': historyChartTime == 31}" class="btn btn-default">Last
+                            month</button>
+                        <button ng-click="loadHistory()" type="button" ng-class="{'btn-success': historyChartTime == 0}"
+                            class="btn btn-default">All</button>
+                    </div>
+                    <div class="chart__contianer" style="height:300px;">
+                        <canvas width="1300" height="300" class="chart chart-line" chart-data="historyChartData"
+                            chart-labels="historyChartLabels" chart-series="historyChartSeries"
+                            chart-options="historyChartOptions" chart-colors="historyChartColors"
+                            chart-dataset-override="historyChartDatasetOverride">
+                        </canvas>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 </div>
 <%+ endSection%>

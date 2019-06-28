@@ -8,6 +8,16 @@ app.controller("dashboardCtrl", [
 
         function init() {
             $scope.powermeters = [];
+
+            $scope.$on('registerClicked', function (ev, data) {
+                $scope.clickedPM = data.pm;
+                $scope.clickedRegister = data.register;
+                $scope.min = data.min;
+                $scope.max = data.max;
+                // $scope.historyChartOptions.scales.yAxes[0].ticks.suggestedMax = $scope.max;
+                // $scope.historyChartOptions.scales.yAxes[0].ticks.suggestedMin = $scope.min;
+            });
+
             getConfig();
 
             // reset the page every one hour
@@ -18,7 +28,74 @@ app.controller("dashboardCtrl", [
                             window.location.assign('/');
                     }).catch(ex => { })
 
-            }, 1800 * 1000)
+            }, 1800 * 1000);
+
+            $scope.historyChartLabels = [];
+            $scope.historyChartSeries = ['مقدار'];
+            $scope.historyChartData = [];
+            $scope.historyChartColors = ['#ff6384'];
+            $scope.historyChartDatasetOverride = [{
+                yAxisID: 'y-axis-1'
+            }];
+
+            $scope.historyChartOptions = {
+                animation: {
+                    duration: 0
+                },
+                elements: {
+                    line: {
+                        tension: 0, // disables bezier curves
+                    }
+                },
+                responsive: true,
+                maintainAspectRatio: false,
+                legend: {
+                    labels: {
+                        fontFamily: 'Vazir',
+                        fontSize: 14,
+                        fontStyle: 'bold'
+                    }
+                },
+                scales: {
+                    yAxes: [{
+                        id: 'y-axis-1',
+                        display: true,
+                        position: 'right',
+                        ticks: {
+                            suggestedMin: $scope.min,
+                            suggestedMax: $scope.max
+                        }
+                    }]
+                }
+            };
+
+            $scope.historyChartTime = 1;
+            $scope.loadHistory = function (time) {
+                $scope.historyChartTime = time || 0;
+
+                $scope.historyChartLabels = [];
+                $scope.historyChartData = [];
+
+                var fromTime = Date.now() - ($scope.historyChartTime * 24 * 3600 * 1000);
+                if ($scope.historyChartTime == 0)
+                    fromTime = 0;
+
+                $scope.isLoading = true;
+                services.getRegisterHistory(fromTime, $scope.clickedPM, $scope.clickedRegister)
+                    .then(function (res) {
+                        var result = res.data;
+                        if (result.success) {
+                            $scope.historyChartLabels = result.data.map(item => item.time);
+                            $scope.historyChartData = result.data.map(item => item.value);
+                        }
+                    })
+                    .catch(function (ex) {
+                        console.log(ex)
+                    }).finally(function () {
+                        $scope.isLoading = false;
+                    });
+            };
+
         }
 
         function getConfig() {
@@ -71,5 +148,4 @@ app.controller("dashboardCtrl", [
         }
 
         init();
-
     }]);

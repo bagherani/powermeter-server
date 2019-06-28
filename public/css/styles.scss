@@ -221,7 +221,17 @@ input[type="range"]::-webkit-slider-thumb {
   padding-right: 4px;
   padding-left: 4px;
 }
+
 .row {
   margin-right: -4px;
   margin-left: -4px;
+}
+
+.chart__contianer{
+  width:100% !important;
+  height: 130px !important;
+}
+
+.container-fluid > [class*="col-"] {
+  margin-top: 8px;
 }

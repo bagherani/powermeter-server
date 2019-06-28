@@ -2,12 +2,14 @@ const EventEmitter = require('events').EventEmitter;
 const sqlite3 = require('sqlite3');
 const config = require('../config.json');
 const db = {};
+const cache = {};
 
 config.powermeters.forEach(pm => {
     var dbName = `p${pm.id}`;
     if (db[dbName] != undefined)
         return;
 
+    cache[dbName] = [];
     db[dbName] = new sqlite3.Database(`${__dirname}/../data/${dbName}.db`);
     db[dbName].run(`create table if not exists pm(
         id   numeric primary key,
@@ -38,19 +40,24 @@ class Database extends EventEmitter {
             params['$' + key.toLowerCase().replace(' ', '')] = data[key];
         });
 
-        db[dbName].run(
-            `insert into pm(id,v1,v2,v3,a1,a2,a3,aavg,pf1,pf2,pf3,pavg) values
-                ($id,$v1,$v2,$v3,$a1,$a2,$a3,$aavg,$pf1,$pf2,$pf3,$pfavg);`,
-            params,
-            err => {
-                params = null;
-                if (err != null) {
-                    this.emit('INSERT_ERROR', err);
+        cache[dbName].push(params);
+
+        // batch insert every 100 records to prevent io
+        if (cache[dbName].length > 100) {
+            var database = db[dbName];
+            database.serialize(function () {
+                var stmt = database.prepare(
+                    `insert into pm(id,v1,v2,v3,a1,a2,a3,aavg,pf1,pf2,pf3,pavg) values
+                    ($id,$v1,$v2,$v3,$a1,$a2,$a3,$aavg,$pf1,$pf2,$pf3,$pfavg);`);
+
+                for (var i = 0; i < cache[dbName].length; i++) {
+                    stmt.run(cache[dbName][i]);
                 }
-                else {
-                    this.emit('INSERT_SUCCESS', params.$id);
-                }
+                stmt.finalize();
+                cache[dbName] = [];
             });
+
+        }
     }
 
     /**
@@ -101,7 +108,7 @@ class Database extends EventEmitter {
                 return;
             }
             count = row.cnt;
-            db[dbName].each(`select * from pm where id between $from and $to`, params, (err, row) => {
+            db[dbName].each(`select * from pm where id >= $from and id <= $to order by id`, params, (err, row) => {
                 if (err != null) {
                     this.emit('READ_ERROR', err);
                 }

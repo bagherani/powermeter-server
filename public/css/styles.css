@@ -246,4 +246,13 @@ input[type="range"]::-webkit-slider-thumb {
   margin-right: -4px;
   margin-left: -4px;
 }
+
+.chart__contianer {
+  width: 100% !important;
+  height: 130px !important;
+}
+
+.container-fluid > [class*="col-"] {
+  margin-top: 8px;
+}
 /*# sourceMappingURL=styles.css.map */

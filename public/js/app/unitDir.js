@@ -2,16 +2,27 @@ app.directive('unit', [function () {
     return {
         scope: {
             ngId: '=',
+            ngPm: '=',
             ngTitle: '=',
             ngShowChart: '=',
             ngMin: '=',
-            ngMax: '='
+            ngMax: '=',
         },
         restrict: 'AE',
-        controller: function ($scope) {
+        controller: function ($scope, $rootScope) {
+            $scope.setClickedRegister = function () {
+                $rootScope.$broadcast('registerClicked', {
+                    pm: $scope.ngPm,
+                    register: $scope.ngTitle.replace(' ', '').toLowerCase(),
+                    min: $scope.ngMin,
+                    max: $scope.ngMax
+                });
+            };
+
             $scope.labels = [];
             $scope.series = ['مقدار'];
             $scope.data = [];
+            $scope.colors = ['#45b7cd', '#ff6384', '#ff8e72'];
             $scope.datasetOverride = [{
                 yAxisID: 'y-axis-1'
             }];
@@ -25,6 +36,7 @@ app.directive('unit', [function () {
                         tension: 0, // disables bezier curves
                     }
                 },
+                responsive: true,
                 maintainAspectRatio: false,
                 legend: {
                     labels: {
@@ -33,7 +45,6 @@ app.directive('unit', [function () {
                         fontStyle: 'bold'
                     }
                 },
-                responsive: false,
                 scales: {
                     yAxes: [{
                         id: 'y-axis-1',
