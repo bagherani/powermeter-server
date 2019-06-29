@@ -94,8 +94,8 @@ class Database extends EventEmitter {
 
         var count = 0;
         var params = {
-            $from: fromDate,
-            $to: toDate
+            $from: parseInt(fromDate),
+            $to: parseInt(toDate)
         };
 
         db[dbName].get(`select count(*) as cnt from pm where id >= $from and id <= $to`, params, (err, row) => {
@@ -103,7 +103,7 @@ class Database extends EventEmitter {
                 this.emit('READ_ERROR', err);
                 return;
             }
-            if (row == undefined) {
+            if (row == undefined || row.cnt == 0) {
                 this.emit('READ_DONE');
                 return;
             }

@@ -48,13 +48,7 @@
                         <button ng-click="loadHistory()" type="button" ng-class="{'btn-success': historyChartTime == 0}"
                             class="btn btn-default">All</button>
                     </div>
-                    <div class="chart__contianer" style="height:300px;">
-                        <canvas width="1300" height="300" class="chart chart-line" chart-data="historyChartData"
-                            chart-labels="historyChartLabels" chart-series="historyChartSeries"
-                            chart-options="historyChartOptions" chart-colors="historyChartColors"
-                            chart-dataset-override="historyChartDatasetOverride">
-                        </canvas>
-                    </div>
+                    <canvas width="570" height="300" id="historyCanvas"></canvas>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
